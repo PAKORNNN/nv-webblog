@@ -1,0 +1,14 @@
+สร้างโฟร์เดอร์ client แล้วเปิด cmd 
+พิมพ์ npm install -g -vueicli
+	init webpack .
+	Y
+	nv-webblog-clinet
+	nodejs veujs webblog clinet
+เลือกตัวบน ขึ้น ลง
+Y
+n
+n
+n
+เลือก NPM
+
+npm run dev

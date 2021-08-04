@@ -1,12 +1,34 @@
 <template>
-    <h1> Get Users By id </h1>
+<div>
+    <h1> Show User </h1>
+    <p1>User ID: {{ user.Id }} </p1>
+    <p>ชื่อ - นามสกุล {{ user.name }} - {{ user.lastname }}</p>
+    <p>email: {{ user.email }}</p>
+    <p>password: {{ user.password }}</p>
+</div>
+
 </template>
 <script>
-    export default {
+import UsersService from '@/services/UsersService'
 
-    }
+    export default {
+        data() {
+            return {
+                user: null,
+            };
+        },
+        async created() {
+            try {
+                let userId = this.$route.params.userId
+                this.user = (await UsersService.show(userId)).data
+        } catch (error){
+            console.log(error);
+        }
+    },
+};
 </script>
 <style scoped>
 
 
 </style>
+

@@ -1,0 +1,32 @@
+g:/cd code/github/nuv-webblog/server
+
+เชื่อมgit
+git config --global user.name "username"
+git config --global user.email "email@gmail.com"
+
+git clone https://github.com/PAKORNNN/nv-webblog.git
+dir
+
+git init เชื่อม U
+
+nmp uninstall
+ไปลบnode_modulesทิ้ง
+
+ละติดตั้งใหม่ 
+npm install
+npm install https://github.com/mapbox/node-sqlite3/tarball/master 
+
+หรือ 
+npm install --force https://github.com/mapbox/node-sqlite3/tarball/master 
+
+ถ้าผ่านพิมตามล่างนี้
+npm install -g nodemon
+
+ปิดการทำงาน Ctrl + C
+Y = yes
+N = no
+
+
+nodemon src/app.js
+
+http://localhost:8081/users

@@ -1,12 +1,13 @@
-g:/cd code/github/nuv-webblog/server
+g:/cd code/github/nuv-webblog/
 
 เชื่อมgit
 git config --global user.name "username"
 git config --global user.email "email@gmail.com"
 
+git init เชื่อม U
+โค้นของตัวเองมา
 git clone https://github.com/PAKORNNN/nv-webblog.git
 dir
-
 git init เชื่อม U
 
 nmp uninstall
@@ -22,11 +23,10 @@ npm install --force https://github.com/mapbox/node-sqlite3/tarball/master
 ถ้าผ่านพิมตามล่างนี้
 npm install -g nodemon
 
-ปิดการทำงาน Ctrl + C
-Y = yes
-N = no
-
-
 nodemon src/app.js
 
 http://localhost:8081/users
+
+ปิดการทำงาน Ctrl + C
+Y = yes
+N = no

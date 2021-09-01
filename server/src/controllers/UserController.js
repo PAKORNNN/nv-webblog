@@ -3,7 +3,6 @@ const {User} = require('../models')
 module.exports = {
   // get all user
   async index (req, res) {
-    //res.send
     try {
         const users = await User.findAll()
         res.send(users)
@@ -13,6 +12,7 @@ module.exports = {
         })
     }
   },
+
   // create user
   async create (req, res) {
     // res.send(JSON.stringify(req.body))
@@ -71,7 +71,8 @@ module.exports = {
     try {
       const user = await User.findByPk(req.params.userId)
       res.send(user)
-    } catch (err) {
+    } 
+    catch (err) {
         req.status(500).send({
             error: 'The user information was incorrect'
         })

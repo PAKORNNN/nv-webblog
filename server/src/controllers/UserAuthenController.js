@@ -47,7 +47,7 @@ module.exports = {
         
         }catch(error){
             res.status(500).send({
-                error: 'Error! from get user'
+                error: 'Error ! from get user' 
             })
         }
     }

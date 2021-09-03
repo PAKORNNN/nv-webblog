@@ -6,7 +6,7 @@
 
         <h4> จำนวนcomment {{ comments.length }} </h4>
         <div v-for="comment in comments" v-bind:key="comment.id">
-        <p> id: {{ comment.id }} </p>
+        <p>id: {{ comment.id }} </p>
         <p>blog id: {{ comment.blogId }}</p>
         <p>comment: {{ comment.comment }}</p>
         <p>

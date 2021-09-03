@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2> Comment Show </h2>
+        <h2> Get all comments </h2>
 
         <!-- <p><button v-on:click="logout"> Logout </button></p> -->
 
@@ -29,9 +29,9 @@ export default {
     async created () {
         this.comments = (await CommentsService.index()).data
     },
-    
+
     methods: {
-        /* logout () {
+         /* logout () {
             this.$store.dispatch('setTkoen', null)
             this.$store.dispatch('setComment', null)
             this.$router.push({
@@ -39,21 +39,21 @@ export default {
         })
     }, */
     navigateTo (route) {
-        this.$souter.push(route)
+        this.$router.push(route)
     },
-    
+
     async deleteComment (comment) {
     try {
         await CommentsService.delete(comment)
             this.refreshData()
             } catch (err) {
-            console.log(err)
+                console.log(err)
             }
         },
         async refreshData() {
             this.comments = (await CommentsService.index()).data
-        }   
-    } 
+        }
+    }
 }
 </script>
 <style scoped>

@@ -48,7 +48,7 @@ module.exports = {
                 where: {
                     id: req.params.blogId
                 }
-            })
+            }) 
 
             if (!blog) {
                 return res.status(403).send({

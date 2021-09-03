@@ -1,8 +1,8 @@
-const {Blog} = require('../models')
+const { Blog } = require('../models')
 
 module.exports = {
     // get all blog
-    async index (req, res) {
+    async index(req, res) {
         try {
             const blogs = await Blog.findAll()
             res.send(blogs)
@@ -14,11 +14,11 @@ module.exports = {
     },
 
     // create blog
-    async create (req, res) {
+    async create(req, res) {
         try {
             const blog = await Blog.create(req.body)
             res.send(blog.toJSON())
-        }catch (err) {
+        } catch (err) {
             res.status(500).send({
                 error: 'Create blog incorrect'
             })
@@ -26,7 +26,7 @@ module.exports = {
     },
 
     // edit blog, suspend, active
-    async put (req, res) {
+    async put(req, res) {
         try {
             await Blog.update(req.body, {
                 where: {
@@ -35,38 +35,38 @@ module.exports = {
             })
             res.send(req.body)
         } catch (err) {
-            res.status(500).send ({
+            res.status(500).send({
                 error: 'Update blog incorrect'
             })
         }
     },
 
     // delete blog
-    async remove (req, res) {
+    async remove(req, res) {
         try {
             const blog = await Blog.findOne({
                 where: {
                     id: req.params.blogId
                 }
             })
-            
-            if(!blog){
-                return res.status(403).send ({
+
+            if (!blog) {
+                return res.status(403).send({
                     error: 'The blog information was incorrect'
                 })
             }
-            
+
             await blog.destroy()
             res.send(blog)
         } catch (err) {
-            res.status(500).send ({
+            res.status(500).send({
                 error: 'The blog information was incorrect'
             })
         }
     },
-    
+
     // get blog by id
-    async show (req, res) {
+    async show(req, res) {
         try {
             const blog = await Blog.findByPk(req.params.blogId)
             res.send(blog)
@@ -77,4 +77,3 @@ module.exports = {
         }
     }
 }
-

@@ -59,7 +59,7 @@ module.exports = {
             await blog.destroy()
             res.send(blog)
         } catch (err) {
-            res.status(500).send({
+            status(500).send({
                 error: 'The blog information was incorrect'
             })
         }
@@ -71,7 +71,7 @@ module.exports = {
             const blog = await Blog.findByPk(req.params.blogId)
             res.send(blog)
         } catch (err) {
-            res.status(500).send({
+            status(500).send({
                 error: 'The blog information was incorrect'
             })
         }

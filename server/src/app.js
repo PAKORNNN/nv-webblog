@@ -1,4 +1,5 @@
 let express = require('express')
+
 const {sequelize} = require('./models')
 let cors = require('cors')
 const config = require('./config/config')
@@ -10,7 +11,6 @@ app.use(express.urlencoded({extended:true}));
 app.use(cors())
 
 require('./userPassport')
-
 require('./routes')(app)
 
 app.get('/status', function (req, res ){

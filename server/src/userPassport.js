@@ -1,6 +1,5 @@
-
 const passport = require('passport')
-const {User} = require('./models')
+const { User } = require('./models')
 
 const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt
@@ -16,14 +15,14 @@ passport.use('user',
             try {
                 const user = await User.findOne({
                     where: {
-                        email:jwtPayload.email
+                        email: jwtPayload.email
                     }
                 })
-                if(!user) {
+                if (!user) {
                     return done(new Error(), false)
                 }
                 return done(null, user)
-            }catch (err) {
+            } catch (err) {
                 return done(new Error(), false)
             }
         }

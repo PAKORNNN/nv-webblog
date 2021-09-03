@@ -10,6 +10,6 @@ module.exports = {
     },    
   },
   authentication: {
-    jwtSecret: "nodejs vuejs"
+    jwtSecret: "nodejs vuejs" //ลิ้งนี้ไปที่ back end เกี่ยวกับการเข้ารหัสไฟล์ userPassport
   }
 }

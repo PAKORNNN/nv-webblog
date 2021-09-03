@@ -14,15 +14,16 @@
   </div>
 </template>
 <script>
-import BlogsService from "@/services/BlogsService";
+import BlogService from "@/services/BlogService";
 
 export default {
-  data () {
+  data() {
     return {
       blog: {
         title: "",
         thumbnail: "null",
-        pictures: "null", 
+        pictues: "null", //ระวังตรงนี้คำผิด
+        content: "",
         category: "",
         status: "",
       },
@@ -31,7 +32,7 @@ export default {
   methods: {
     async editBlog() {
       try {
-        await BlogsService.put(this.blog);
+        await BlogService.put(this.blog);
         this.$router.push({
           name: "blogs",
         });
@@ -43,7 +44,7 @@ export default {
   async created() {
     try {
       let blogId = this.$route.params.blogId;
-      this.blog = (await BlogsService.show(blogId)).data;
+      this.blog = (await BlogService.show(blogId)).data;
     } catch (error) {
       console.log(error);
     }

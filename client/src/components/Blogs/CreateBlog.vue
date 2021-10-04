@@ -1,89 +1,82 @@
 <template>
   <div>
-    <h1>Create Blog</h1>
-    <form v-on:submit.prevent="createBlog">
-      <p>title: <input type="text" v-model="blog.title"></p>
-      <transition name="fade"> 
-        <div class="thumbnail-pic" v-if="blog.thumbnail != 'null'">
-          <img :src="BASE_URL+blog.thumbnail" alt="thumbnail">
-        </div>
+    <h1>Edit Blog</h1>
+    <form v-on:submit.prevent="editBlog">
+      <p>title: <input type="text" v-model="blog.title" /></p>
+      <transition name="fade">
+      <div class="thumbnail-pic" v-if="blog.thumbnail != 'null'">
+        <img :src="BASE_URL+blog.thumbnail" alt="thumbnail">
+      </div>
       </transition>
-      <!-- <p><strong>Title:</strong> <input type="text" v-model="blog.title" /></p> -->
-
+      
       <form enctype="multipart/form-data" novalidate>
         <div class="dropbox">
-          <input
-            type="file"
-            multiple
-            :name="uploadFieldName"
-            :disabled="isSaving"
-            @change="
-              filesChange($event.target.name, $event.target.files);
-              fileCount = $event.target.files.length;
-            "
-            accept="image/*"
-            class="input-file"
-          />
-          <!-- <p v-if="isInitial || isSuccess"/> -->
-          <p v-if="isInitial">
-            Drag your files(s) <br />
-            here to begin or click to browse
-          </p>
-          <p v-if="isSaving">Uploading {{ fileCount }} files...</p>
-          <p v-if="isSuccess">Upload Successful.</p>
-          <p v-if="isFailed">Upload Failed</p>
+        <input
+          type="file"
+          multiple
+          :name="uploadFieldName"
+          :disabled="isSaving"
+          @change="
+            filesChange($event.target.name, $event.target.files);
+            fileCount = $event.target.files.length;
+          "
+          accept="image/*"
+          class="input-file"
+        />
+        <!-- <p v-if="isInitial || isSuccess"/> -->
+        <p v-if="isInitial">Drag your files(s) <br> here to begin or click to browse</p>
+        <p v-if="isSaving">Uploading {{ fileCount }} files...</p>
+        <p v-if="isSuccess">Upload Successful.</p>
+        <p v-if= "isFailed">Upload Failed</p>
         </div>
-
         <div>
-          <ul class="pictures">
-            <li v-for="picture in pictures" v-bind:key="picture.id">
-              <img
-                style="margin-bottom: 5px"
-                :src="BASE_URL + picture.name"
-                alt="picture image"
-              />
-              <button v-on:click.prevent="delFile(picture)"> Delete </button>
-              <button v-on:click.prevent="useThumbnail(picture.name)">Thumbnail</button>
-            </li>
-          </ul>
-          <div class="clearfix"></div>
+            <ul class="pictures">
+                <li v-for="picture in pictures" v-bind:key="picture.id">
+                    <img style="margin-bottom:5px;"
+                    :src="BASE_URL+picture.name"
+                    alt="picture image">
+                    <br />
+                    <button v-on:click.prevent="delFile(picture)">Delete</button>
+                    <button v-on:click.prevent="useThumbnail(picture.name)">Thumbnail</button>
+                </li>
+            </ul>
         </div>
       </form>
-
-      <p><strong>Content:</strong></p>
+      <p><strong>content: </strong></p>
       <p>
-        <vue-ckeditor
-          v-model.lazy="blog.content"
-          :config="config"
-          @blur="onBlur($event)"
-          @focus="onFocus($ecent)"
+        <vue-ckeditor 
+          v-model.lazy="blog.content" 
+          :config="config" 
+          @blur="onBlur($event)" 
+          @focus="onFocus($event)" 
         />
       </p>
-
-      <p>
-        <strong>Category:</strong> <input type="text" v-model="blog.category" />
+      <p>category: <input type="text" v-model="blog.category" /></p>
+      <p>status: <input type="text" v-model="blog.status" /></p>
+      <p><button type="submit">Update Blog</button>
+         <button v-on:click="navigateTo('/blogs')">Back</button>
       </p>
-      <p>
-        <strong>Status:</strong> <input type="text" v-model="blog.status" />
-      </p>
-      <p><button type="submit">Create Blog</button></p>
     </form>
   </div>
 </template>
 <script>
-import BlogService from "@/services/BlogService";
-import VueCkeditor from "vue-ckeditor2";
+import BlogsService from "@/services/BlogService";
+import VueCkeditor from 'vue-ckeditor2'
 import UploadService from "@/services/UploadService";
-import App from "../../App.vue";
-
 const STATUS_INITIAL = 0,
   STATUS_SAVING = 1,
   STATUS_SUCCESS = 2,
   STATUS_FAILED = 3;
-
 export default {
-  data() {
+  data () {
     return {
+      blog: {
+        title: "",
+        thumbnail: "null",
+        pictures: "null", 
+        category: "",
+        status: "",
+      },
       BASE_URL: "http://localhost:8081/assets/uploads/",
       error: null,
       //uploadedFiles: [],
@@ -93,151 +86,25 @@ export default {
       uploadedFileNames: [],
       pictures: [],
       pictureIndex: 0,
-      blog: {
-        title: "",
-        thumbnail: "null",
-        pictues: "null",
-        content: "",
-        category: "",
-        status: "",
-      },
       config: {
-        /* toolbar: [
-          ["Bold", "Italic", "Underline", "Strike", "Subscript", "SuperScript"],
-        ], */
-        height: 300,
-      },
+                //toolbar: [
+                //["Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript"]
+                //],
+                //height: 300
+            },
     };
   },
   methods: {
-    async createBlog() {
-      this.blog.pictures = JSON.stringify(this.pictures)
+    async editBlog() {
       try {
-        await BlogService.post(this.blog);
+        this.blog.pictures = JSON.stringify(this.pictures)
+        await BlogsService.put(this.blog);
         this.$router.push({
           name: "blogs",
         });
       } catch (err) {
         console.log(err);
       }
-    },
-    onBlur(editor) {
-      console.log(editor);
-    },
-    onfocus(editor) {
-      console.log(editor);
-    },
-    created() {
-      this.config.toolbar = [
-        {
-          name: "document",
-          items: [
-            "Source",
-            "-",
-            "Save",
-            "NewPage",
-            "Preview",
-            "Print",
-            "-",
-            "Templates",
-          ],
-        },
-        {
-          name: "clipboard",
-          items: ["Cut", "Copy", "Paste", "PasteText", "-", "Undo", "Redo"],
-        },
-        {
-          name: "editing",
-          items: ["Find", "Replace", "-", "SelectAll", "-", "Scayt"],
-        },
-        {
-          name: "forms",
-          items: [
-            "Form",
-            "Checkbox",
-            "Radio",
-            "TextField",
-            "Textarea",
-            "Select",
-            "Button",
-            "ImageButton",
-            "HiddentField",
-          ],
-        },
-        "/",
-        {
-          name: "basicstyles",
-          items: [
-            "Bold",
-            "Italic",
-            "Underline",
-            "Strike",
-            "Subscript",
-            "SuperScript",
-            "-",
-            "CopyFormatting",
-            "RemoveFormat",
-          ],
-        },
-        {
-          name: "basicstyles",
-          items: [
-            "Bold",
-            "Italic",
-            "Strike",
-            "SubScript",
-            "Superscript",
-            "-",
-            "CopyFormatting",
-            "RemoveFormat",
-          ],
-        },
-        {
-          name: "paragraph",
-          items: [
-            "NumberedList",
-            "BulletedList",
-            "-",
-            "Outdent",
-            "Indent",
-            "-",
-            "Blockquote",
-            "CreateDiv",
-            "-",
-            "JustifyLeft",
-            "JustifyCenter",
-            "JustifyRight",
-            "JustifyBlock",
-            "-",
-            "BidiLtr",
-            "BidiRtl",
-            "Language",
-          ],
-        },
-        { name: "Links", items: ["Link", "Unlink", "Anchor"] },
-        {
-          name: "insert",
-          items: [
-            "Image",
-            "Flash",
-            "Table",
-            "HorizontalRule",
-            "Smiley",
-            "Specialchar",
-            "PageBreak",
-            "Iframe",
-            "InsertPre",
-          ],
-        },
-        "/",
-        {
-          name: "styles",
-          items: ["Styles", "Format", "Font", "Font", "FontSize"],
-        },
-        { name: "colors", items: ["TextColor", "BGColor"] },
-        { name: "tools", items: ["Maximize", "ShowBlocks"] },
-        { name: "about", items: ["About"] },
-      ];
     },
     navigateTo(route) {
       console.log(route);
@@ -261,51 +128,30 @@ export default {
         this.currentStatus = STATUS_SAVING;
         await UploadService.upload(formData);
         this.currentStatus = STATUS_SUCCESS;
-
-        // update image uploaded display
-        let pictureJSON = [];
-        this.uploadedFileNames.forEach((uploadFilename) => {
-          let found = false;
-          for (let i = 0; i < this.pictures.length; i++) {
-            if (this.pictures[i].name == uploadFilename) {
-              found = true;
-              break;
+        let pictureJSON = []
+        this.uploadedFileNames.forEach(uploadFileName => {
+            let found = false;
+            for (let i=0; i<this.pictures.length; i++) {
+                if(this.pictures[i].name == uploadFileName){
+                    found = true;
+                    break;
+                }
+                
             }
-          }
-
-          if (!found) {
-            this.pictureIndex++;
-            let pictureJSON = {
-              id: this.pictureIndex,
-              name: uploadFilename,
-            };
-            this.pictures.push(pictureJSON);
-          }
+            if(!found){
+                this.pictureIndex++
+                let pictureJSON = {
+                    id: this.pictureIndex,
+                    name: uploadFileName
+                }
+                this.pictures.push(pictureJSON)
+            }
         });
-
         this.clearUploadResult();
       } catch (error) {
         console.log(error);
         this.currentStatus = STATUS_FAILED;
       }
-    },
-    filesChange(filedName, fileList) {
-      //handle file changes
-      const formData = new FormData();
-
-      if (!fileList.length) return;
-
-      //append the files to FormData
-      Array.from(Array(fileList.length).keys()).map((x) => {
-        formData.append(filedName, fileList[x], fileList[x].name);
-        this.uploadedFileNames.push(fileList[x].name);
-      });
-
-      //save it
-      this.save(formData);
-    },
-    clearUploadResult: function () {
-      setTimeout(() => this.reset(), 5000);
     },
     async delFile (material){
       let result = confirm("Want to delete?")
@@ -313,11 +159,9 @@ export default {
         let dataJSON = {
           "filename":material.name
         }
-
         await UploadService.delete(dataJSON)
-
-        for (var i=0; i<this.pictures.length; i++){
-          if(this.pictures[i].id === material.id) {
+        for(var i=0;i<this.pictures.length;i++){
+          if(this.pictures[i].id === material.id){
             this.pictures.splice(i, 1)
             this.materialIndex--
             break
@@ -325,12 +169,177 @@ export default {
         }
       }
     },
-    useThumbnail (filename) {
+    useThumbnail (filename){
       console.log(filename)
       this.blog.thumbnail = filename
+    },
+    filesChange(fieldName, fileList) {
+      //handle file changes
+      const formData = new FormData();
+      if (!fileList.length) return;
+      //append the files to FormData
+      Array.from(Array(fileList.length).keys()).map((x) => {
+        formData.append(fieldName, fileList[x], fileList[x].name);
+        this.uploadedFileNames.push(fileList[x].name);
+      });
+      //save here
+      this.save(formData);
+    },
+    clearUploadResult: function () {
+      setTimeout(() => this.reset(), 5000);
+    },
+  async created() {
+    try {
+      let blogId = this.$route.params.blogId;
+      this.blog = (await BlogsService.show(blogId)).data;
+      this.config.toolbar = [
+                {
+                    name: "document",
+                    item: [
+                        "Source",
+                        "-",
+                        "Save",
+                        "NewPage",
+                        "Preview",
+                        "Print",
+                        "-",
+                        "Templates"
+                    ]
+                },
+                {
+                    name: "clipboard",
+                    item: [
+                        "Cut",
+                        "Copy",
+                        "Paste",
+                        "PasteText",
+                        "PasteFromWord",
+                        "-",
+                        "Undo",
+                        "Redo"
+                    ]
+                },
+                {
+                    name: "editing",
+                    item: [
+                        "Find",
+                        "Replace",
+                        "-",
+                        "SelectAll",
+                        "-",
+                        "Scayt"
+                    ]
+                },
+                {
+                    name: "from",
+                    item: [
+                        "From",
+                        "Checkbox",
+                        "Radio",
+                        "TextField",
+                        "Textarea",
+                        "Select",
+                        "Button",
+                        "ImageButton",
+                        "HiddenField"
+                    ]
+                },
+                "/",
+                {
+                    name: "basicstyles",
+                    item: [
+                        "Bold",
+                        "Italic",
+                        "UnderLine",
+                        "Strike",
+                        "Subscript",
+                        "Superscript",
+                        "-",
+                        "CopyFormatting",
+                        "RemoveFormat"
+                    ]
+                },
+                {
+                    name: "paragraph",
+                    item: [
+                        "NumberedList",
+                        "BulletedList",
+                        "-",
+                        "Outdent",
+                        "Indent",
+                        "-",
+                        "Blockquote",
+                        "CreateDiv",
+                        "-",
+                        "JustifyLeft",
+                        "JustifyCenter",
+                        "JustifyRight",
+                        "JustifyBlock",
+                        "-",
+                        "BidiLtr",
+                        "BidiRtl",
+                        "Language"
+                    ]
+                },
+                {
+                    name: "link",
+                    item: [
+                        "Link",
+                        "Unlink",
+                        "Anchor"
+                    ]
+                },
+                {
+                    name: "insert",
+                    item: [
+                        "Image",
+                        "Flash",
+                        "Table",
+                        "HorizontalRule",
+                        "Smiley",
+                        "SpecialChar",
+                        "PageBreak",
+                        "Iframe",
+                        "InsertPre"
+                    ]
+                },
+                "/",
+                {
+                    name: "styles",
+                    item: [
+                        "Styles",
+                        "Format",
+                        "Font",
+                        "FontSize"
+                    ]
+                },
+                {
+                    name: "colors",
+                    item: [
+                        "TextColor",
+                        "BGColor"
+                    ]
+                },
+                {
+                    name: "tool",
+                    item: [
+                        "Maximize",
+                        "ShowBlocks"
+                    ]
+                },
+                {
+                    name: "about",
+                    item: [
+                        "About"
+                    ]
+                }
+            ]
+    } catch (error) {
+      console.log(error);
     }
   },
-  created() {
+},
+created() {
     this.reset();
   },
   computed: {
@@ -348,23 +357,19 @@ export default {
     },
   },
   components: {
-    VueCkeditor,
-  },
+        VueCkeditor
+    },
 };
 </script>
 <style scoped>
 .dropbox {
-  outline: 2px dashed grey;
+  outline: 2px dashed gray;
   outline-offset: -10px;
   background: lemonchiffon;
   color: dimgray;
   padding: 10px 10px;
   min-height: 200px;
-  position: relative;
-  cursor: pointer;
-}
-.dropbox:hover {
-  background: khaki;
+  position: pointer;
 }
 .input-file {
   opacity: 0;
@@ -373,32 +378,33 @@ export default {
   position: absolute;
   cursor: pointer;
 }
+.dropbox:hover {
+  background: khaki;
+}
 .dropbox p {
   font-size: 1.2em;
   text-align: center;
   padding: 50px 0;
 }
-
-ul.pictures {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  float: left;
-  padding-top: 10px;
-  padding-bottom: 10px;
+ul.pictures{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    float: left;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 ul.pictures li {
-  float: left;
+    float: left;
 }
-ul.pictures li img {
-  max-width: 180px;
-  margin-right: 20px;
+ul.pictures li img{
+    max-width: 180px;
+    margin-right: 20px;
 }
-.clearfix {
-  clear: both;
+.clearfix{
+    clear: both;
 }
 .thumbnail-pic img{
   width: 200px;
 }
-
 </style>

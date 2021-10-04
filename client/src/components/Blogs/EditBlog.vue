@@ -94,7 +94,7 @@ export default {
       blog: {
         title: "",
         thumbnail: "null",
-        pictues: "null", 
+        pictures: "null",  //pictues
         content: "",
         category: "",
         status: "",

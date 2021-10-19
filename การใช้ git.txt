@@ -1,15 +1,31 @@
-g:/cd code/github/nuv-webblog/
-
 เชื่อมgit
 git config --global user.name "username"
 git config --global user.email "email@gmail.com"
 
 git init เชื่อม U
-โค้นของตัวเองมา
-git clone https://github.com/PAKORNNN/nv-webblog.git
+ลิงค์โค้นของตัวเองมา
+git clone https://github.com/PAKORNNN/nv-webblog.git ลิงค์ที่ได้ใช้
 dir
-git init เชื่อม U
+กลับไป VScode
+กดติ๊กถูก เพื่อ commit และมองลงล่าง กดpush หรือกดสามจุดละ push
+***ถ้า pushไม่ไป
+	ไปเปิด CMD ในโฟเดอร์ที่จะ pushละ พิมพ์  git push
+	เลือก เลข 1 ไปเชื่อมบนเว็บก่อน ละจะเริ่มทำงานpush
 
+
+วิธี up ขึ้น github 
+ 1. git init
+ 2. git add .
+ 3. git commit -m "first commit"
+
+ 4. git remote add origin https://github.com/PAKORNNN/Project-Bike.git
+ 5. git push -u origin main
+
+วิธีลบ remote
+ 1.git remote rm origin
+ 2.git remote add origin ตามด้วยลิงค์ใหม่
+
+-----------------------------------------------
 nmp uninstall
 ไปลบnode_modulesทิ้ง
 
@@ -24,6 +40,8 @@ npm install --force https://github.com/mapbox/node-sqlite3/tarball/master
 npm install -g nodemon
 
 nodemon src/app.js
+ของอีกตัว
+npm run dev
 
 http://localhost:8081/users
 
